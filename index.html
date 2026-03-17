@@ -1,8 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashwin A | Visionary Creator</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
-<html>
-<div>
-  <h2>Title</h2>
-  <p>This is a paragraph inside a <strong>div</strong> container.</p>
-  <a href="#">Link</a>
-</div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background-light': '#F2EFE9',
+                        'ink': '#1A1A1A',
+                        'off-white': '#F2EFE9',
+                    },
+                    fontFamily: {
+                        'serif': ['Cormorant Garamond', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Playfair Display', 'serif'],
+                        'signature': ['Pinyon Script', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F2EFE9;
+            color: #1A1A1A;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Paper Grain Texture */
+        .paper-grain {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCELYZZLklcojyZDN27ZIt8DwmfXwa_oubgCmq8q7vUX5RfVDfQYxvN8pmyznvRpthQxeEW0ypc5DR3vJwsNfksY27XP8sLllmw8fFGQp1NqPxAW2UYJwpu7ndZ-pBGbDfuOA9RUj7_sz_nU4eeMXLmQiCcNz-GvuvH2n71k0Ta8jB2RiXUnJWC-r_CbQA46z3L0MR27xCknqrRbn8LZ6oE-ljZ1YNUzf9wLn5FHwfIo1D4ANLkcFds4uFUXrVWD7aIBFj9JulkGNYG);
+            opacity: .04;
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+        }
+
+        /* Responsive Hero Panel Logic */
+        .panels-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 12px;
+        }
+
+        .hero-panel {
+            position: relative;
+            flex: 1;
+            height: 55vh;
+            min-width: 0;
+            cursor: pointer;
+            filter: grayscale(100%) contrast(.8) brightness(.9);
+            opacity: .4;
+            overflow: hidden;
+            will-change: flex, filter, opacity, transform;
+            transition: 
+                flex 800ms cubic-bezier(0.19, 1, 0.22, 1), 
+                filter 800ms cubic-bezier(0.19, 1, 0.22, 1), 
+                opacity 800ms cubic-bezier(0.19, 1, 0.22, 1), 
+                transform 800ms cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .panels-container:hover .hero-panel {
+            opacity: .2;
+            filter: grayscale(100%) contrast(.6) brightness(.8);
+        }
+
+        .panels-container .hero-panel:hover {
+            flex: 4;
+            opacity: 1;
+            filter: grayscale(0%) contrast(1) brightness(1);
+        }
+
+        .panel-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(26, 26, 26, 0.1); border-radius: 10px; }
+
+        .vertical-text { writing-mode: vertical-rl; }
+
+        /* Section animations */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Anthology Hover Image */
+        .anthology-img-preview {
+            position: fixed;
+            width: 280px;
+            height: 380px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @media(max-width: 768px) {
+            .panels-container { 
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory; 
+                padding: 0 20px;
+                justify-content: flex-start;
+            }
+            .hero-panel { 
+                min-width: 280px; 
+                flex: 0 0 auto; 
+                height: 50vh; 
+                scroll-snap-align: center; 
+                filter: none !important; 
+                opacity: 1 !important; 
+                transform: none !important; 
+            }
+            .cinematic-box {
+                width: 90vw !important;
+                height: auto !important;
+                flex-direction: column !important;
+            }
+            .cinematic-text-card {
+                width: 100% !important;
+                height: auto !important;
+                padding: 2rem !important;
+                writing-mode: horizontal-tb !important;
+            }
+            .vertical-text { writing-mode: horizontal-tb !important; }
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <div class="paper-grain"></div>
+
+    <!-- Navigation Overlay -->
+    <div id="nav-overlay" class="fixed top-0 left-0 w-full h-screen bg-black z-[400] flex flex-col transition-transform duration-[900ms] ease-[cubic-bezier(0.23,1,0.32,1)] -translate-y-full">
+        <div class="absolute inset-0 pointer-events-none paper-grain opacity-5"></div>
+        <div class="relative z-20 w-full h-24 px-6 md:px-12 flex items-center justify-between">
+            <span class="font-sans text-[10px] text-white/40 tracking-[0.4em] uppercase">Navigation // Ashwin A</span>
+            <div id="nav-close-toggle" class="flex flex-col items-end gap-[4px] cursor-pointer group p-2">
+                <div class="w-8 h-[1px] bg-off-white rotate-45 translate-y-[0.5px]"></div>
+                <div class="w-8 h-[1px] bg-off-white -rotate-45 -translate-y-[0.5px]"></div>
+            </div>
+        </div>
+        <div class="relative z-10 flex-grow flex flex-col items-center justify-center">
+            <nav class="flex flex-col items-center space-y-6 md:space-y-12">
+                <a href="#home" class="nav-link font-signature text-[3.5rem] md:text-[5.5rem] text-off-white hover:scale-105 transition-transform">Homë</a>
+                <a href="#prologue" class="nav-link font-serif text-[1.8rem] md:text-[2.5rem] text-off-white/40 hover:text-off-white transition-all tracking-wider">The Prologue</a>
+                <a href="#anthology" class="nav-link font-serif text-[1.8rem] md:text-[2.5rem] text-off-white/40 hover:text-off-white transition-all tracking-wider">The Anthology</a>
+                <a href="#epilogue" class="nav-link font-serif text-[1.8rem] md:text-[2.5rem] text-off-white/40 hover:text-off-white transition-all tracking-wider">The Epilogue</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Floating UI -->
+    <header class="fixed top-0 left-0 w-full h-24 px-6 md:px-12 z-[110] flex items-center justify-between pointer-events-none">
+        <div id="notif-trigger" class="pointer-events-auto cursor-pointer opacity-80 hover:opacity-100 transition-opacity flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full border border-ink/10 flex items-center justify-center bg-background-light/50 backdrop-blur-sm">
+                <span class="material-symbols-outlined text-[20px] text-ink">insights</span>
+            </div>
+            <span class="hidden md:block text-[9px] font-sans tracking-[0.3em] uppercase opacity-40">Updates</span>
+        </div>
+        <div class="absolute left-1/2 -translate-x-1/2 top-8 flex flex-col items-center pointer-events-auto cursor-default">
+            <h1 class="font-signature text-[2.2rem] md:text-[2.8rem] leading-none text-ink">Ashwin A</h1>
+            <div class="h-px w-8 bg-ink/20 mt-2"></div>
+        </div>
+        <div id="nav-trigger" class="pointer-events-auto flex flex-col items-end gap-[6px] cursor-pointer group opacity-80 hover:opacity-100 transition-all p-2">
+            <div class="w-8 h-[1.2px] bg-ink group-hover:w-10 transition-all"></div>
+            <div class="w-5 h-[1.2px] bg-ink group-hover:w-10 transition-all"></div>
+            <div class="w-8 h-[1.2px] bg-ink group-hover:w-10 transition-all"></div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: HERO -->
+    <main id="home" class="relative z-10 w-full flex flex-col items-center pt-32 pb-24 min-h-screen">
+        <div class="w-full px-4 md:px-12 flex-grow flex flex-col justify-center">
+            <div id="hero-panels-container" class="panels-container transition-all duration-1000">
+                <!-- Panels generated by JS -->
+            </div>
+
+            <!-- Enhanced Cinematic Mode View -->
+            <div id="cinematic-hero" class="fixed inset-0 flex items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] z-[150] pointer-events-none opacity-0 invisible scale-[0.98]">
+                <div class="cinematic-box origin-center relative flex items-center gap-[24px] transition-transform duration-500 max-w-[95vw]" style="width: 1150px; height: 70vh;">
+                    
+                    <button id="cinematic-prev" class="absolute top-1/2 -translate-y-1/2 left-[-12vw] lg:left-[-100px] flex flex-col items-center gap-4 opacity-0 cursor-pointer hover:opacity-100 transition-opacity pointer-events-auto z-50">
+                        <span class="material-symbols-outlined text-ink text-[24px]">arrow_left_alt</span>
+                        <span class="text-[8px] tracking-[0.4em] uppercase font-sans text-ink opacity-40 [writing-mode:vertical-rl] rotate-180">Previous</span>
+                    </button>
+
+                    <div id="cinematic-content" class="flex-grow h-full flex items-center justify-center pointer-events-auto">
+                        <!-- Content injected via JS -->
+                    </div>
+
+                    <button id="cinematic-next" class="absolute top-1/2 -translate-y-1/2 right-[-12vw] lg:right-[-100px] flex flex-col items-center gap-4 opacity-0 cursor-pointer hover:opacity-100 transition-opacity pointer-events-auto z-50">
+                        <span class="text-[8px] tracking-[0.4em] uppercase font-sans text-ink opacity-40 [writing-mode:vertical-rl]">Next Project</span>
+                        <span class="material-symbols-outlined text-ink text-[24px]">arrow_right_alt</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center flex flex-col items-center mt-12 md:mt-16 relative z-50">
+                <h2 id="hero-title" class="text-[1.8rem] md:text-[4.5rem] font-display text-ink uppercase tracking-tight transition-all duration-500 leading-none">
+                    Digital Realms
+                </h2>
+                <p id="hero-subtitle" class="text-[9px] md:text-[11px] font-serif text-ink tracking-[0.35em] italic mt-4 opacity-60 transition-all duration-500">
+                    A curate selection of experiments in visual narrative
+                </p>
+                <div class="flex flex-col md:flex-row items-center gap-6 mt-16 md:mt-24">
+                    <button id="toggle-transition" class="group flex items-center gap-4 cursor-pointer bg-white/50 backdrop-blur-sm px-8 py-4 rounded-full border border-ink/5 shadow-sm hover:bg-ink hover:text-off-white transition-all">
+                        <span class="material-symbols-outlined text-[18px]">fullscreen</span>
+                        <span class="text-[9px] font-sans tracking-[0.25em] uppercase">Immersive Mode</span>
+                    </button>
+                    <div class="hidden md:block h-[1px] w-12 bg-ink/10"></div>
+                    <a href="#prologue" class="group flex items-center gap-4 opacity-40 hover:opacity-100 transition-all">
+                        <span class="text-[9px] font-sans tracking-[0.25em] uppercase">The Journey</span>
+                        <span class="material-symbols-outlined text-[18px] animate-bounce">expand_more</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SECTION 2: THE PROLOGUE -->
+    <section id="prologue" class="relative z-10 w-full py-32 md:py-56 bg-ink text-off-white overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none paper-grain opacity-5"></div>
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 md:gap-24 items-center">
+            <div class="lg:col-span-7 reveal-on-scroll">
+                <span class="text-[9px] tracking-[0.5em] uppercase opacity-40 mb-12 block">Chapter I // The Prologue</span>
+                <h3 class="font-display text-[3.5rem] md:text-[6.5rem] leading-[0.9] mb-12 md:mb-16">Creating Space <br>for the Soul.</h3>
+                <div class="font-serif text-[1.4rem] md:text-[2rem] leading-relaxed opacity-70 space-y-8 max-w-2xl">
+                    <p>My work exists at the intersection of technical precision and poetic intuition. I believe that a digital experience shouldn't just function—it should resonate.</p>
+                    <p class="italic font-light">"Architecture is not just about buildings; it's about the feeling of being within them. I apply this same philosophy to the digital void."</p>
+                </div>
+            </div>
+            <div class="lg:col-span-5 relative reveal-on-scroll delay-300">
+                <div class="aspect-[4/5] bg-zinc-900 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
+                    <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=2499&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 grayscale hover:grayscale-0 transition-all duration-1000 scale-110 hover:scale-100" alt="Ashwin A Vision">
+                </div>
+                <div class="absolute -bottom-8 -left-8 md:-left-12 bg-off-white text-ink p-8 md:p-12 shadow-2xl">
+                    <span class="text-[9px] tracking-[0.3em] uppercase block mb-4 opacity-50">Ethos</span>
+                    <p class="font-serif text-xl md:text-2xl italic">Elegance is the only true form of sustainability.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE ANTHOLOGY -->
+    <section id="anthology" class="relative z-10 w-full py-32 md:py-48 bg-background-light">
+        <div id="anthology-preview" class="anthology-img-preview overflow-hidden shadow-2xl rounded-sm">
+            <img id="anthology-preview-img" src="" class="w-full h-full object-cover" />
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 md:mb-32 reveal-on-scroll">
+                <div class="max-w-xl">
+                    <span class="text-[9px] tracking-[0.5em] uppercase opacity-40 mb-6 block">Chapter II // The Anthology</span>
+                    <h3 class="font-display text-5xl md:text-8xl uppercase tracking-tighter leading-none">Curated Archive</h3>
+                </div>
+                <div class="h-px flex-grow bg-ink/10 mx-12 hidden md:block mb-6"></div>
+                <p class="font-serif text-xl opacity-60 italic mt-8 md:mt-0">Selected research & development.</p>
+            </div>
+
+            <div class="reveal-on-scroll">
+                <div class="archive-list space-y-0">
+                    <!-- Project rows are enhanced via JS for hover previews -->
+                </div>
+            </div>
+
+            <div class="mt-24 md:mt-32 text-center">
+                <button class="group relative px-12 py-6 overflow-hidden border border-ink/10 rounded-full font-sans text-[10px] tracking-[0.4em] uppercase hover:text-off-white transition-colors duration-500">
+                    <span class="relative z-10">Access Full Registry</span>
+                    <div class="absolute inset-0 bg-ink translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: THE EPILOGUE -->
+    <footer id="epilogue" class="relative z-10 w-full pt-40 pb-12 bg-[#0A0A0A] text-off-white overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none paper-grain opacity-5"></div>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-24 reveal-on-scroll">
+                <div class="lg:w-1/2">
+                    <h3 class="font-signature text-[5rem] md:text-[8rem] leading-none mb-12 text-white/90">The Epilogue</h3>
+                    <p class="font-serif text-2xl md:text-3xl opacity-50 italic mb-16 max-w-md">The conversation begins when the project ends.</p>
+                    <div class="space-y-4">
+                        <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Direct Inquiry</span>
+                        <a href="mailto:hello@ashwin.a" class="font-display text-3xl md:text-6xl uppercase hover:opacity-50 transition-all block">hello@ashwin.a</a>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/3 grid grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Location</span>
+                        <p class="font-serif text-lg opacity-60">Bengaluru, IN<br>Digital Nomad</p>
+                    </div>
+                    <div class="space-y-8">
+                        <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Socials</span>
+                        <ul class="font-serif text-lg space-y-2 opacity-60">
+                            <li><a href="#" class="hover:opacity-100 transition-opacity">Instagram</a></li>
+                            <li><a href="#" class="hover:opacity-100 transition-opacity">LinkedIn</a></li>
+                            <li><a href="#" class="hover:opacity-100 transition-opacity">Dribbble</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-40 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[8px] md:text-[9px] tracking-[0.5em] uppercase opacity-30 gap-6">
+                <span>Ashwin A // Portfolio v4.0.1</span>
+                <div class="flex items-center gap-6">
+                    <span class="animate-pulse">Status: Open for Collaboration</span>
+                    <span>2024 © All Rights Reserved</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sidebar Updates -->
+    <div id="notif-sidebar" class="fixed inset-0 w-full h-screen z-[500] pointer-events-none invisible">
+        <div id="notif-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 opacity-0"></div>
+        <div id="notif-panel" class="absolute top-0 left-0 w-full max-w-[480px] md:w-[32vw] h-full bg-black pointer-events-auto flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] -translate-x-full">
+            <div class="absolute inset-0 pointer-events-none paper-grain opacity-5"></div>
+            <div class="p-8 md:p-16 h-full flex flex-col">
+                <button id="notif-close" class="self-start text-white/30 hover:text-white transition-colors mb-16 md:mb-24">
+                    <span class="material-symbols-outlined text-[32px]">close</span>
+                </button>
+                <div class="space-y-16">
+                    <div class="reveal-sidebar">
+                        <span class="text-[9px] text-white/40 tracking-[0.5em] uppercase block mb-10">Dispatch // 001</span>
+                        <div class="space-y-12">
+                            <div class="group cursor-pointer">
+                                <span class="text-[9px] text-white/20 block mb-3 font-sans">14.03.2024</span>
+                                <h5 class="text-off-white font-serif text-2xl group-hover:text-white transition-colors italic leading-tight">Keynote speaker at the Creative Code Conference.</h5>
+                                <div class="w-0 group-hover:w-full h-px bg-white/20 mt-4 transition-all duration-700"></div>
+                            </div>
+                            <div class="group cursor-pointer">
+                                <span class="text-[9px] text-white/20 block mb-3 font-sans">28.02.2024</span>
+                                <h5 class="text-off-white font-serif text-2xl group-hover:text-white transition-colors italic leading-tight">"Digital Solitude" series featured in Awwwards.</h5>
+                                <div class="w-0 group-hover:w-full h-px bg-white/20 mt-4 transition-all duration-700"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-auto flex justify-between items-end border-t border-white/10 pt-8">
+                    <p class="font-signature text-4xl text-white">Ashwin A</p>
+                    <span class="text-[8px] text-white/20 uppercase tracking-widest">Built in Majibail</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            { id: 1, title: "Luminal", tag: "Digital Experience", year: "2024", img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670", video: "https://cdn.pixabay.com/video/2020/11/07/55718-503971825_large.mp4", offset: "18px", lockedTitle: "Neon Submergence", lockedSubtitle: "Experimental Digital Architecture" },
+            { id: 2, title: "Gilded", tag: "Visual Identity", year: "2023", img: "https://images.unsplash.com/photo-1557683311-eac922347aa1?q=80&w=2658", video: "https://cdn.pixabay.com/video/2019/12/12/30121-380473626_large.mp4", offset: "-22px", lockedTitle: "The Gilded Anthology", lockedSubtitle: "Visual Identity & Branding" },
+            { id: 3, title: "Eternal", tag: "Motion Design", year: "2024", img: "https://images.unsplash.com/photo-1502691876148-a84978e59af8?q=80&w=2670", video: "https://cdn.pixabay.com/video/2020/05/06/38270-415950888_large.mp4", offset: "24px", lockedTitle: "Sands of Eternity", lockedSubtitle: "Immersive Motion Storytelling" },
+            { id: 4, title: "Zen", tag: "UI Development", year: "2023", img: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=2667", video: "https://cdn.pixabay.com/video/2024/03/03/202813-918944372_large.mp4", offset: "-18px", lockedTitle: "Echoes of Zen", lockedSubtitle: "Minimalist Interactive Canvas" },
+            { id: 5, title: "Liquid", tag: "Typography", year: "2024", img: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2670", video: "https://cdn.pixabay.com/video/2025/10/12/309451_large.mp4", offset: "26px", lockedTitle: "Liquid Typography", lockedSubtitle: "Dynamic Font Systems" },
+            { id: 6, title: "Monolith", tag: "3D Design", year: "2024", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672", video: "https://cdn.pixabay.com/video/2025/01/14/252568_large.mp4", offset: "-24px", lockedTitle: "The Monolith Effect", lockedSubtitle: "3D Spatial Explorations" }
+        ];
+
+        let cinematicIndex = 0;
+        let isImmersive = false;
+        let isSwitching = false;
+
+        function init() {
+            renderHeroPanels();
+            renderArchiveList();
+            setupEventListeners();
+            setupScrollObserver();
+        }
+
+        function renderHeroPanels() {
+            const container = document.getElementById('hero-panels-container');
+            projects.forEach(p => {
+                const panel = document.createElement('div');
+                panel.className = 'hero-panel';
+                panel.innerHTML = `<video autoplay loop muted playsinline class="panel-video"><source src="${p.video}" type="video/mp4"></video>`;
+                panel.style.transform = window.innerWidth > 768 ? `translateY(${p.offset})` : 'none';
+                
+                panel.addEventListener('mouseenter', () => {
+                    if (isImmersive) return;
+                    updateHeroText(p.lockedTitle, p.lockedSubtitle);
+                });
+                panel.addEventListener('mouseleave', () => {
+                    if (isImmersive) return;
+                    updateHeroText("Digital Realms", "A curate selection of experiments in visual narrative");
+                });
+                container.appendChild(panel);
+            });
+        }
+
+        function renderArchiveList() {
+            const container = document.querySelector('.archive-list');
+            const preview = document.getElementById('anthology-preview');
+            const previewImg = document.getElementById('anthology-preview-img');
+
+            projects.forEach((p, index) => {
+                const row = document.createElement('div');
+                row.className = 'group border-t border-ink/10 py-10 md:py-12 flex flex-col md:flex-row md:items-center justify-between hover:bg-ink hover:text-off-white px-6 md:px-12 transition-all cursor-pointer';
+                row.innerHTML = `
+                    <div class="flex items-baseline gap-8 md:gap-12">
+                        <span class="text-[9px] opacity-40 font-sans tracking-widest">0${index + 1}/0${projects.length}</span>
+                        <h4 class="font-display text-3xl md:text-5xl uppercase tracking-tighter">${p.lockedTitle}</h4>
+                    </div>
+                    <div class="flex items-center gap-12 mt-4 md:mt-0">
+                        <span class="font-serif italic opacity-50 text-sm md:text-base">${p.tag} // ${p.year}</span>
+                        <span class="material-symbols-outlined text-xl group-hover:translate-x-2 transition-transform hidden md:block">arrow_right_alt</span>
+                    </div>
+                `;
+
+                row.addEventListener('mousemove', (e) => {
+                    if(window.innerWidth < 1024) return;
+                    preview.style.opacity = '1';
+                    preview.style.transform = `translate3d(${e.clientX + 30}px, ${e.clientY - 190}px, 0) scale(1)`;
+                    if(previewImg.src !== p.img) previewImg.src = p.img;
+                });
+
+                row.addEventListener('mouseleave', () => {
+                    preview.style.opacity = '0';
+                    preview.style.transform = `scale(0.8) translateY(20px)`;
+                });
+
+                container.appendChild(row);
+            });
+        }
+
+        function updateHeroText(title, subtitle) {
+            const t = document.getElementById('hero-title');
+            const s = document.getElementById('hero-subtitle');
+            t.classList.add('opacity-0');
+            s.classList.add('opacity-0');
+            setTimeout(() => {
+                t.textContent = title;
+                s.textContent = subtitle;
+                t.classList.remove('opacity-0');
+                s.classList.remove('opacity-0');
+            }, 250);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('nav-trigger').addEventListener('click', () => toggleNav(true));
+            document.getElementById('nav-close-toggle').addEventListener('click', () => toggleNav(false));
+            document.getElementById('notif-trigger').addEventListener('click', () => toggleSidebar(true));
+            document.getElementById('notif-close').addEventListener('click', () => toggleSidebar(false));
+            document.getElementById('notif-backdrop').addEventListener('click', () => toggleSidebar(false));
+            document.getElementById('toggle-transition').addEventListener('click', toggleImmersive);
+            document.getElementById('cinematic-next').addEventListener('click', () => navigateCinematic(1));
+            document.getElementById('cinematic-prev').addEventListener('click', () => navigateCinematic(-1));
+
+            // Close Nav on link click
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => toggleNav(false));
+            });
+        }
+
+        function toggleNav(open) {
+            const el = document.getElementById('nav-overlay');
+            el.classList.toggle('-translate-y-full', !open);
+            el.classList.toggle('translate-y-0', open);
+        }
+
+        function toggleSidebar(open) {
+            const sidebar = document.getElementById('notif-sidebar');
+            const backdrop = document.getElementById('notif-backdrop');
+            const panel = document.getElementById('notif-panel');
+
+            if (open) {
+                sidebar.classList.remove('invisible');
+                requestAnimationFrame(() => {
+                    backdrop.classList.replace('opacity-0', 'opacity-100');
+                    panel.classList.replace('-translate-x-full', 'translate-x-0');
+                });
+            } else {
+                backdrop.classList.replace('opacity-100', 'opacity-0');
+                panel.classList.replace('translate-x-0', '-translate-x-full');
+                setTimeout(() => sidebar.classList.add('invisible'), 700);
+            }
+        }
+
+        function toggleImmersive() {
+            isImmersive = !isImmersive;
+            const cinematic = document.getElementById('cinematic-hero');
+            const panels = document.getElementById('hero-panels-container');
+            const btn = document.getElementById('toggle-transition');
+            
+            if (isImmersive) {
+                cinematic.classList.remove('invisible', 'opacity-0');
+                cinematic.classList.add('opacity-100', 'scale-100');
+                panels.classList.add('opacity-0', 'scale-[1.05]', 'pointer-events-none');
+                document.getElementById('hero-title').classList.add('opacity-0');
+                document.getElementById('hero-subtitle').classList.add('opacity-0');
+                renderCinematicContent();
+            } else {
+                cinematic.classList.remove('opacity-100', 'scale-100');
+                cinematic.classList.add('opacity-0');
+                setTimeout(() => cinematic.classList.add('invisible'), 800);
+                setTimeout(() => {
+                    panels.classList.remove('opacity-0', 'scale-[1.05]', 'pointer-events-none');
+                    document.getElementById('hero-title').classList.remove('opacity-0');
+                    document.getElementById('hero-subtitle').classList.remove('opacity-0');
+                }, 100);
+            }
+        }
+
+        function renderCinematicContent() {
+            const content = document.getElementById('cinematic-content');
+            const p = projects[cinematicIndex];
+            
+            content.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center gap-[24px] w-full h-full transition-all duration-700 ${isSwitching ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}">
+                    <div class="cinematic-text-card bg-white p-10 md:p-16 flex flex-col items-center text-center shadow-2xl h-full w-[380px] shrink-0 border border-ink/5">
+                         <h2 class="vertical-text text-3xl md:text-[3.5rem] font-display text-ink leading-none tracking-tighter uppercase">${p.lockedTitle}</h2>
+                         <div class="mt-auto flex flex-col items-center">
+                            <span class="material-symbols-outlined text-4xl mb-6 opacity-30">blur_on</span>
+                            <span class="text-[10px] font-sans tracking-[0.4em] uppercase opacity-40">${p.lockedSubtitle}</span>
+                         </div>
+                    </div>
+                    <div class="flex-grow w-full h-full overflow-hidden shadow-2xl relative bg-zinc-900 rounded-sm">
+                        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-80">
+                            <source src="${p.video}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent"></div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('cinematic-prev').classList.toggle('opacity-0', false);
+            document.getElementById('cinematic-next').classList.toggle('opacity-0', false);
+        }
+
+        function navigateCinematic(dir) {
+            if (isSwitching) return;
+            isSwitching = true;
+            renderCinematicContent();
+            setTimeout(() => {
+                cinematicIndex = (cinematicIndex + dir + projects.length) % projects.length;
+                isSwitching = false;
+                renderCinematicContent();
+            }, 500);
+        }
+
+        function setupScrollObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        }
+
+        // Parallax & Dynamic Scaling
+        window.addEventListener('mousemove', (e) => {
+            if (!isImmersive) return;
+            const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+            const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+            const box = document.querySelector('.cinematic-box');
+            if(box) box.style.transform = `translate3d(${x * 15}px, ${y * 15}px, 0) rotateX(${y * -2}deg) rotateY(${x * 2}deg)`;
+        });
+
+        // Resize handler for hero panels
+        window.addEventListener('resize', () => {
+            const panels = document.querySelectorAll('.hero-panel');
+            panels.forEach((p, i) => {
+                p.style.transform = window.innerWidth > 768 ? `translateY(${projects[i].offset})` : 'none';
+            });
+        });
+
+        window.onload = init;
+    </script>
+</body>
 </html>
