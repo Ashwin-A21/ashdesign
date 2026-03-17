@@ -39,6 +39,29 @@
             color: #1A1A1A;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            cursor: none; /* Custom cursor */
+        }
+
+        /* Custom Cursor */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: #1A1A1A;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        #cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(26, 26, 26, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         /* Paper Grain Texture */
@@ -136,9 +159,18 @@
         }
         .lab-card:hover {
             transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Magnetic button helper */
+        .magnetic-wrap {
+            display: inline-block;
+            transition: transform 0.3s ease;
         }
 
         @media(max-width: 768px) {
+            body { cursor: auto; }
+            #cursor-dot, #cursor-circle { display: none; }
             .panels-container { 
                 overflow-x: auto; 
                 scroll-snap-type: x mandatory; 
@@ -171,6 +203,10 @@
 </head>
 <body class="font-sans">
 
+    <!-- Cursor Elements -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-circle"></div>
+
     <div class="paper-grain"></div>
 
     <!-- Navigation Overlay -->
@@ -197,7 +233,7 @@
     <!-- Floating UI Header -->
     <header class="fixed top-0 left-0 w-full h-24 px-6 md:px-12 z-[110] flex items-center justify-between pointer-events-none">
         <div id="notif-trigger" class="pointer-events-auto cursor-pointer opacity-80 hover:opacity-100 transition-opacity flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full border border-ink/10 flex items-center justify-center bg-background-light/50 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-full border border-ink/10 flex items-center justify-center bg-background-light/50 backdrop-blur-sm shadow-sm">
                 <span class="material-symbols-outlined text-[20px] text-ink">insights</span>
             </div>
             <span class="hidden md:block text-[9px] font-sans tracking-[0.3em] uppercase opacity-40">Updates</span>
@@ -248,14 +284,16 @@
                     A curated selection of experiments in visual narrative
                 </p>
                 <div class="flex flex-col md:flex-row items-center gap-6 mt-16 md:mt-24">
-                    <button id="toggle-transition" class="group flex items-center gap-4 cursor-pointer bg-white/50 backdrop-blur-sm px-8 py-4 rounded-full border border-ink/5 shadow-sm hover:bg-ink hover:text-off-white transition-all">
-                        <span class="material-symbols-outlined text-[18px]">fullscreen</span>
-                        <span class="text-[9px] font-sans tracking-[0.25em] uppercase">Immersive Mode</span>
-                    </button>
+                    <div class="magnetic-wrap">
+                        <button id="toggle-transition" class="group flex items-center gap-4 cursor-pointer bg-white/50 backdrop-blur-sm px-8 py-4 rounded-full border border-ink/5 shadow-sm hover:bg-ink hover:text-off-white transition-all">
+                            <span class="material-symbols-outlined text-[18px]">fullscreen</span>
+                            <span class="text-[9px] font-sans tracking-[0.25em] uppercase">Immersive Mode</span>
+                        </button>
+                    </div>
                     <div class="hidden md:block h-[1px] w-12 bg-ink/10"></div>
                     <a href="#prologue" class="group flex items-center gap-4 opacity-40 hover:opacity-100 transition-all">
                         <span class="text-[9px] font-sans tracking-[0.25em] uppercase">The Journey</span>
-                        <span class="material-symbols-outlined text-[18px] animate-bounce">expand_more</span>
+                        <span class="material-symbols-outlined text-[18px] animate-bounce text-accent">expand_more</span>
                     </a>
                 </div>
             </div>
@@ -295,21 +333,39 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-16 md:gap-8">
-                <div class="reveal-on-scroll delay-100 group">
+                <div class="reveal-on-scroll delay-100 group cursor-default">
                     <div class="text-[6rem] font-display opacity-5 mb-8 group-hover:opacity-10 transition-opacity">01</div>
-                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight">The Concept</h4>
+                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight group-hover:text-accent transition-colors">The Concept</h4>
                     <p class="font-serif text-lg opacity-60 leading-relaxed">Finding the central narrative thread before a single line of code is written. We define the emotional core of the experience.</p>
                 </div>
-                <div class="reveal-on-scroll delay-300 group">
+                <div class="reveal-on-scroll delay-300 group cursor-default">
                     <div class="text-[6rem] font-display opacity-5 mb-8 group-hover:opacity-10 transition-opacity">02</div>
-                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight">The Craft</h4>
+                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight group-hover:text-accent transition-colors">The Craft</h4>
                     <p class="font-serif text-lg opacity-60 leading-relaxed">Meticulous execution. Balancing performance with aesthetics to ensure that beauty never compromises the user's flow.</p>
                 </div>
-                <div class="reveal-on-scroll delay-500 group">
+                <div class="reveal-on-scroll delay-500 group cursor-default">
                     <div class="text-[6rem] font-display opacity-5 mb-8 group-hover:opacity-10 transition-opacity">03</div>
-                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight">The Culture</h4>
+                    <h4 class="font-serif text-3xl mb-6 italic tracking-tight group-hover:text-accent transition-colors">The Culture</h4>
                     <p class="font-serif text-lg opacity-60 leading-relaxed">Deploying products that resonate within their specific ecosystem, creating a lasting impact on how people interact with the web.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: THE MANIFESTO -->
+    <section id="manifesto" class="relative z-10 w-full py-32 md:py-64 bg-zinc-950 text-white overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-b from-ink to-transparent"></div>
+        </div>
+        <div class="max-w-5xl mx-auto px-6 text-center reveal-on-scroll">
+            <span class="text-[9px] tracking-[0.8em] uppercase opacity-40 mb-12 block">A Perspective</span>
+            <h3 class="font-display text-3xl md:text-6xl italic leading-tight mb-20">
+                "I seek the quietest version of the loudest idea. <br class="hidden md:block">
+                True digital architecture isn't built for the eyes, <br class="hidden md:block">
+                it is built for the silence in between movements."
+            </h3>
+            <div class="flex justify-center">
+                <div class="h-px w-24 bg-accent opacity-30"></div>
             </div>
         </div>
     </section>
@@ -349,24 +405,24 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-on-scroll">
-                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/30 cursor-pointer">
-                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 transition-opacity">filter_vintage</span>
-                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white">Generative Botanics</h5>
+                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/50 cursor-pointer transition-all duration-500">
+                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">filter_vintage</span>
+                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white group-hover:text-accent transition-colors">Generative Botanics</h5>
                     <p class="text-[11px] opacity-40 leading-relaxed uppercase tracking-widest font-sans">01 // GLSL Shader System</p>
                 </div>
-                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/30 cursor-pointer">
-                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 transition-opacity">language</span>
-                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white">Spatial Language</h5>
+                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/50 cursor-pointer transition-all duration-500">
+                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">language</span>
+                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white group-hover:text-accent transition-colors">Spatial Language</h5>
                     <p class="text-[11px] opacity-40 leading-relaxed uppercase tracking-widest font-sans">02 // XR Communication</p>
                 </div>
-                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/30 cursor-pointer">
-                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 transition-opacity">psychology</span>
-                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white">Cognitive Flow</h5>
+                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/50 cursor-pointer transition-all duration-500">
+                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">psychology</span>
+                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white group-hover:text-accent transition-colors">Cognitive Flow</h5>
                     <p class="text-[11px] opacity-40 leading-relaxed uppercase tracking-widest font-sans">03 // Neural Interfaces</p>
                 </div>
-                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/30 cursor-pointer">
-                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 transition-opacity">auto_awesome</span>
-                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white">Ambient Logic</h5>
+                <div class="lab-card bg-white/5 p-8 border border-white/5 group hover:border-accent/50 cursor-pointer transition-all duration-500">
+                    <span class="material-symbols-outlined text-accent mb-12 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">auto_awesome</span>
+                    <h5 class="font-serif text-2xl mb-4 italic tracking-tight text-white group-hover:text-accent transition-colors">Ambient Logic</h5>
                     <p class="text-[11px] opacity-40 leading-relaxed uppercase tracking-widest font-sans">04 // Reactive Environments</p>
                 </div>
             </div>
@@ -382,30 +438,32 @@
                     <p class="font-serif text-2xl md:text-3xl opacity-50 italic mb-16 max-w-md">Turning the page on another digital chapter.</p>
                     <div class="space-y-4">
                         <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Direct Inquiry</span>
-                        <a href="mailto:hello@ashwin.a" class="font-display text-3xl md:text-6xl uppercase hover:opacity-50 transition-all block">hello@ashwin.a</a>
+                        <div class="magnetic-wrap">
+                            <a href="mailto:hello@ashwin.a" class="font-display text-3xl md:text-6xl uppercase hover:text-accent transition-all block">hello@ashwin.a</a>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="lg:w-1/3 grid grid-cols-2 gap-12">
                     <div class="space-y-8">
                         <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Location</span>
-                        <p class="font-serif text-lg opacity-60">Bengaluru, IN<br>Working Remotely</p>
+                        <p class="font-serif text-lg opacity-60 italic">Bengaluru, IN<br>Remotely Across Timezones</p>
                     </div>
                     <div class="space-y-8">
                         <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block">Socials</span>
-                        <ul class="font-serif text-lg space-y-2 opacity-60">
-                            <li><a href="#" class="hover:opacity-100 transition-opacity">Instagram</a></li>
-                            <li><a href="#" class="hover:opacity-100 transition-opacity">LinkedIn</a></li>
-                            <li><a href="#" class="hover:opacity-100 transition-opacity">Dribbble</a></li>
+                        <ul class="font-serif text-lg space-y-2 opacity-60 italic">
+                            <li><a href="#" class="hover:text-white transition-colors">Instagram</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">LinkedIn</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Dribbble</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="mt-40 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[8px] md:text-[9px] tracking-[0.5em] uppercase opacity-30 gap-6">
-                <span>Ashwin A // Portfolio v4.5.0</span>
+                <span>Ashwin A // Portfolio v5.0.0</span>
                 <div class="flex items-center gap-6">
-                    <span class="animate-pulse">Status: Accepting Selective Commissions</span>
+                    <span class="animate-pulse flex items-center gap-2"><div class="w-1 h-1 bg-accent rounded-full"></div> Available for Select Commissions</span>
                     <span>2024 © Digital Architecture</span>
                 </div>
             </div>
@@ -440,7 +498,7 @@
                 </div>
                 <div class="mt-auto flex justify-between items-end border-t border-white/10 pt-8">
                     <p class="font-signature text-4xl text-white">Ashwin A</p>
-                    <span class="text-[8px] text-white/20 uppercase tracking-widest animate-pulse">Live // V4.5</span>
+                    <span class="text-[8px] text-white/20 uppercase tracking-widest animate-pulse">Live // V5.0</span>
                 </div>
             </div>
         </div>
@@ -466,6 +524,60 @@
             setupEventListeners();
             setupScrollObserver();
             setupCursorEffect();
+            setupMagneticButtons();
+        }
+
+        // Custom Cursor Implementation
+        function setupCursorEffect() {
+            const dot = document.getElementById('cursor-dot');
+            const circle = document.getElementById('cursor-circle');
+            
+            window.addEventListener('mousemove', (e) => {
+                const { clientX: x, clientY: y } = e;
+                
+                dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                circle.style.transform = `translate3d(${x - 20}px, ${y - 20}px, 0)`;
+
+                // Hover states
+                const target = e.target;
+                const isHoverable = target.closest('button, a, .hero-panel, .archive-list > div, .lab-card');
+                
+                if (isHoverable) {
+                    circle.style.transform = `translate3d(${x - 30}px, ${y - 30}px, 0) scale(1.5)`;
+                    circle.style.background = 'rgba(26, 26, 26, 0.05)';
+                    circle.style.borderColor = 'rgba(197, 160, 89, 0.4)';
+                    dot.style.background = '#C5A059';
+                } else {
+                    circle.style.background = 'transparent';
+                    circle.style.borderColor = 'rgba(26, 26, 26, 0.2)';
+                    dot.style.background = '#1A1A1A';
+                }
+            });
+
+            // Immersive Mode Logic: 3D Box Transformation
+            window.addEventListener('mousemove', (e) => {
+                if (!isImmersive) return;
+                const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+                const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+                const box = document.querySelector('.cinematic-box');
+                if(box) box.style.transform = `translate3d(${x * 15}px, ${y * 15}px, 0) rotateX(${y * -2}deg) rotateY(${x * 2}deg)`;
+            });
+        }
+
+        // Magnetic Button Effect
+        function setupMagneticButtons() {
+            const magnets = document.querySelectorAll('.magnetic-wrap');
+            magnets.forEach(m => {
+                m.addEventListener('mousemove', (e) => {
+                    const bounding = m.getBoundingClientRect();
+                    const x = (e.clientX - bounding.left) - bounding.width / 2;
+                    const y = (e.clientY - bounding.top) - bounding.height / 2;
+                    m.style.transform = `translate3d(${x * 0.3}px, ${y * 0.3}px, 0)`;
+                });
+                m.addEventListener('mouseleave', () => {
+                    m.style.transform = `translate3d(0, 0, 0)`;
+                });
+            });
         }
 
         function renderHeroPanels() {
@@ -604,13 +716,13 @@
             const content = document.getElementById('cinematic-content');
             const p = projects[cinematicIndex];
             
-            // Layout: Attached, Width 220px, Full Height
+            // Layout: Attached card, 220px width, vertical silhouette
             content.innerHTML = `
-                <div class="flex flex-col md:flex-row items-center w-full h-full transition-all duration-700 ${isSwitching ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}">
+                <div class="flex flex-col md:flex-row items-center w-full h-full transition-all duration-700 ${isSwitching ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}">
                     <div class="cinematic-text-card bg-white p-6 md:p-10 flex flex-col items-center text-center shadow-2xl h-full w-[220px] shrink-0 border border-ink/5 z-20">
                          <h2 class="vertical-text text-2xl md:text-[2.6rem] font-display text-ink leading-none tracking-tighter uppercase">${p.lockedTitle}</h2>
                          <div class="mt-auto flex flex-col items-center">
-                            <span class="material-symbols-outlined text-3xl mb-4 opacity-30 text-accent">flare</span>
+                            <span class="material-symbols-outlined text-3xl mb-4 opacity-40 text-accent animate-pulse">flare</span>
                             <span class="text-[9px] font-sans tracking-[0.3em] uppercase opacity-40">${p.lockedSubtitle}</span>
                          </div>
                     </div>
@@ -648,16 +760,6 @@
             }, { threshold: 0.15 });
 
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-        }
-
-        function setupCursorEffect() {
-            window.addEventListener('mousemove', (e) => {
-                if (!isImmersive) return;
-                const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-                const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-                const box = document.querySelector('.cinematic-box');
-                if(box) box.style.transform = `translate3d(${x * 15}px, ${y * 15}px, 0) rotateX(${y * -2}deg) rotateY(${x * 2}deg)`;
-            });
         }
 
         window.addEventListener('resize', () => {
